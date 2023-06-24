@@ -506,12 +506,12 @@
 
 .dice-animation
 {
-    animation: dice-roll 3s ease 1;
+    animation: dice-roll 2.5s ease 1;
 }
 
 .dice-reverse
 {
-    animation: dice-reverse 3s ease 1; 
+    animation: dice-reverse 2.5s ease 1; 
 }
 
 @keyframes dice-reverse {
@@ -521,11 +521,17 @@
         scale: 1;
         transform: rotate(720deg);
     }
-    50% {
+    10% {
         visibility: visible;
         opacity: 1;
         scale: 1;
         transform: rotate(720deg);
+    }
+    60% {
+        visibility: visible;
+        opacity: 0;
+        scale: 0;
+        transform: rotate(0deg);
     }
     100% {
         visibility: visible;

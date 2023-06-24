@@ -127,7 +127,8 @@ LondonGame.AdjacentPlatforms = Object.freeze({
     ],
     "victoria-line": [
         ["highbury-and-islington-victoria", "kings-cross-victoria"],
-        ["kings-cross-victoria", "warren-street-victoria"],
+        ["kings-cross-victoria", "euston-victoria"],
+        ["euston-victoria", "warren-street-victoria"],
         ["warren-street-victoria", "oxford-circus-victoria"],
         ["oxford-circus-victoria", "green-park-victoria"],
         ["green-park-victoria", "victoria-victoria"],
@@ -161,7 +162,7 @@ LondonGame.AdjacentPlatforms = Object.freeze({
         ["bond-street-central", "oxford-circus-central"],
         ["oxford-circus-central", "tottenham-court-road-central"],
         ["tottenham-court-road-central", "holborn-central"],
-        ["holborn-central", "chlinefrom-h-ancery-lane-central"],
+        ["holborn-central", "chancery-lane-central"],
         ["chancery-lane-central", "st-pauls-central"],
         ["st-pauls-central", "bank-central"],
         ["bank-central", "liverpool-street-central"]
@@ -205,7 +206,7 @@ LondonGame.AdjacentPlatforms = Object.freeze({
         ["moorgate-circle", "liverpool-street-circle"],
         ["liverpool-street-circle", "aldgate-circle"],
         ["aldgate-circle", "tower-hill-circle"],
-        ["tower-hill-circle", "m-h-conument-circle"],
+        ["tower-hill-circle", "monument-circle"],
         ["monument-circle", "cannon-street-circle"],
         ["cannon-street-circle", "mansion-house-circle"],
         ["mansion-house-circle", "blackfriars-circle"],
@@ -329,7 +330,10 @@ LondonGame.addToArray = function (array, item) {
  * @returns {string} The updated version of the station name
  */
 LondonGame.getStationName = function (station) {
-    const modifiedText = station.replace("-station", "").replace("-dialog", "");
+    const modifiedText = station.replace(
+        "-station",
+        ""
+    ).replace("-dialog", "").replace("-node", "");
     const splicedText = modifiedText.split("-");
     const textArray = [];
     splicedText.forEach(function (element) {
@@ -363,6 +367,34 @@ LondonGame.addDestinations = function (stations, array) {
     return playerDestinations;
 };
 
+const updateAvailableRoutes = function (adjacencyList, platforms) {
+    adjacencyList.forEach(function (endingStops, startingStop) {
+        if (!platforms.includes(startingStop)) {
+            endingStops = [];
+        }
+        endingStops.forEach(function (platform) {
+            if (!platforms.includes(platform)) {
+                endingStops = LondonGame.closeNode(endingStops, platform);
+            }
+        });
+    });
+/*     platforms.push(location);
+    routes.forEach(function (route) {
+        let isRouteAvailable = true;
+        console.log(route);
+        route.forEach(function (platformOnRoute) {
+            if (!platforms.includes(platformOnRoute)) {
+                isRouteAvailable = false;
+            }
+        });
+        console.log(isRouteAvailable);
+        if (!isRouteAvailable) {
+            routes = LondonGame.closeNode(routes, route);
+        }
+    }); */
+    return adjacencyList;
+};
+
 
 /**
  * This function performs a search algorithm to find the minimum number of steps
@@ -379,7 +411,7 @@ LondonGame.addDestinations = function (stations, array) {
  * @returns {string[]} An array of distances to each station on the line
  */
 LondonGame.breadthFirstSearch = function (line, platforms, location, dice) {
-    const adjacencyList = new Map();
+    let adjacencyList = new Map();
     const addEdge = function (origin, destination) {
         if (!adjacencyList.has(origin)) {
             adjacencyList.set(origin, []);
@@ -390,17 +422,11 @@ LondonGame.breadthFirstSearch = function (line, platforms, location, dice) {
         adjacencyList.get(origin).push(destination);
         adjacencyList.get(destination).push(origin);
     };
-    const routes = LondonGame.AdjacentPlatforms[line];
+    const routes = [...LondonGame.AdjacentPlatforms[line]];
     routes.forEach(function (route) {
         addEdge(...route);
     });
-
-/*     if (!platforms.includes(location)) {
-        platforms.push(location);
-    } */
-    //ensure that the player can move from their own location
-    //returns distance of all stations from start
-
+    adjacencyList = updateAvailableRoutes(adjacencyList, platforms, location);
     const visited = new Set(); //array with unique values
     const queue = [location];
     const stationDistance = new Map();
@@ -411,6 +437,9 @@ LondonGame.breadthFirstSearch = function (line, platforms, location, dice) {
     while (queue.length > 0) {
         let station = queue.shift(); //mutates the queue
         let destinations = adjacencyList.get(station);
+        if (!destinations) {
+            return;
+        }
         i = stationDistance.get(station) + 1; //depth for preceding stations
         let j = 0;
         while (j < destinations.length) {
@@ -428,7 +457,7 @@ LondonGame.breadthFirstSearch = function (line, platforms, location, dice) {
         }
     }
     let inRangePlatforms = [];
-    stationDistance.forEach((value, key) => {
+    stationDistance.forEach(function (value, key) {
         if (value <= dice) {
             if (key !== location) {
                 inRangePlatforms.push(key);
