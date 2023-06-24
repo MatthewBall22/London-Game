@@ -313,6 +313,7 @@ startGameButton.onclick = function () {
             stationsCopy,
             LondonGame.integerArray(GameState.destinations_per_player)
         );
+        console.log(stationsList);
         GameState.destinations[name] = stationsList;
     });
     setTimeout(function () {
