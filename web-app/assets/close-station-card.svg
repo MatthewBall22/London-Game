@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="close-station-card" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 75 100">
+<title>Close station card</title>
+  <defs>
+    <style>
+      .special-shadow {
+        filter: url(#boxShadow);
+        cursor: pointer;
+      }
+
+      .normal-shadow {
+        filter: url(#drop-shadow-1);
+      }
+
+      * {
+        pointer-events: none;
+      }
+
+      .path {
+        pointer-events: all;
+      }
+
+      .hidden {
+        opacity: 0;
+      }
+      
+      .cls-1 {
+        stroke-linejoin: round;
+        stroke-width: 2.35px;
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+      }
+
+      .cls-1, .cls-3, .path {
+        stroke: #1d1d1b;
+      }
+
+      .cls-5 {
+        letter-spacing: -.0001em;
+      }
+
+      .cls-6 {
+        font-size: 5px;
+      }
+
+      .cls-6, .cls-7 {
+        font-family: London-Tube, 'London Tube';
+        text-align: center;
+      }
+
+      .cls-6, .cls-3, .path {
+        fill: #fff;
+      }
+
+      .cls-8 {
+        fill: #e42313;
+      }
+
+      .cls-2 {
+        stroke: #e42313;
+        stroke-width: 4px;
+      }
+
+      .cls-2, .cls-3, .path {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-7 {
+        font-size: 8px;
+      }
+
+      .cls-9 {
+        fill: #3a3a3a;
+      }
+
+      .cls-3, .path {
+        stroke-width: 2px;
+      }
+
+      .cls-10 {
+        opacity: .1;
+      }
+
+      .cls-11 {
+        letter-spacing: .01008em;
+      }
+
+      .cls-12 {
+        fill: #5b5b5b;
+      }
+    </style>
+    <filter id="boxShadow">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#e42313" flood-opacity="0.5" />
+    </filter>
+    <filter id="drop-shadow-1" filterUnits="userSpaceOnUse">
+      <feOffset dx="2" dy="2"/>
+      <feGaussianBlur result="blur" stdDeviation="2"/>
+      <feFlood flood-color="#000" flood-opacity=".25"/>
+      <feComposite in2="blur" operator="in"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g>
+    <path class="path normal-shadow" id="close-station" d="M67.5,8.59998V91.40002c0,.35999-.04999,.69995-.15002,1.02997-.44995,1.47998-1.82996,2.57001-3.44995,2.57001H11.09998c-1.97998,0-3.59998-1.62-3.59998-3.59998V8.59998c0-1.97998,1.62-3.59998,3.59998-3.59998H63.90002c1.97998,0,3.59998,1.62,3.59998,3.59998Z"/>
+  </g>
+  <g>
+    <g id="text-container">
+      <path class="cls-3" d="M70,90c0,4.14001-3.35999,7.5-7.5,7.5-2.21997,0-4.21002-.96002-5.57001-2.5-1.20001-1.33002-1.92999-3.08002-1.92999-5,0-4.14001,3.35999-7.5,7.5-7.5,1.91998,0,3.66998,.72998,5,1.92999,1.53998,1.35999,2.5,3.35004,2.5,5.57001Z"/>
+      <text text-anchor="middle" class="cls-7" transform="translate(62.5 92.34962) scale(1)"><tspan id="inner-text" x="0" y="0">x2</tspan></text>
+    </g>
+    <g class="cls-10">
+      <polyline class="cls-1" points="37.49319 36.89291 37.50681 30.23408 37.51363 25.98659 37.52044 21.47363"/>
+      <polyline class="cls-1" points="61.11538 83.22374 55.87422 77.97921 51.60984 73.71483"/>
+      <polyline class="cls-1" points="24.48495 23.93115 24.48131 23.92751 21.1768 20.60058 15.71034 15.1117 12.22188 11.61203 8.51505 7.89399"/>
+      <polyline class="cls-1" points="67.05628 20.26764 67.05114 20.26764 62.362 20.25179 54.6154 20.23594 49.67405 20.22801 44.42387 20.22009"/>
+    </g>
+    <rect class="cls-8" x="14.7" y="15.2" width="45.6" height="9.6" rx="4.8" ry="4.8"/>
+    <g>
+      <path class="cls-12" d="M51.45373,56.8066c-.95095-4.5434-4.19338-8.27451-8.49905-10.00473-1.67077-.68017-3.5066-1.04998-5.42832-1.04998-6.87451,0-12.60658,4.74811-13.93395,11.05471-.19149,.90471-.29057,1.83587-.29057,2.79338s.09907,1.89528,.29057,2.80003c1.32736,6.3066,7.05944,11.0481,13.93395,11.0481,1.52547,0,2.99814-.23773,4.37831-.6736,4.82075-1.51886,8.51888-5.47451,9.54907-10.3745,.19149-.90475,.29057-1.84248,.29057-2.80003s-.09907-1.88867-.29057-2.79338Zm-9.54907,10.65189c-1.30092,.68678-2.79338,1.07642-4.37169,1.07642-4.06791,0-7.5151-2.57549-8.72356-6.13489-.29718-.87831-.45566-1.82265-.45566-2.80003s.15848-1.91507,.45566-2.79338c1.20185-3.56605,4.64904-6.1415,8.71695-6.1415,1.58492,0,3.07738,.3896,4.37831,1.08303,2.04058,1.07642,3.60567,2.88585,4.33868,5.05847,.30379,.87831,.46227,1.81604,.46227,2.79338s-.15848,1.92172-.46227,2.80003c-.73301,2.17263-2.30471,3.98205-4.33868,5.05847Z"/>
+      <rect class="cls-9" x="19.99995" y="56.80331" width="35" height="5.59892"/>
+    </g>
+    <text class="cls-6" transform="translate(21.35095 21.46907) scale(1.02714 1)"><tspan class="cls-11" x="0" y="0">C</tspan><tspan class="cls-5" x="3.72507" y="0">lose Station</tspan></text>
+  </g>
+  <g>
+    <circle class="cls-2" cx="37.49995" cy="59.6" r="21.00001"/>
+    <line class="cls-2" x1="22.65071" y1="74.44926" x2="52.3492" y2="44.75074"/>
+  </g>
+</svg>

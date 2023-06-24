@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="action-manage-stations" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 80 80">
+  <defs>
+    <style>
+      .cls-1 {
+        opacity: 0;
+      }
+
+      .cls-2 {
+        fill: url(#button-gradient);
+        filter: url(#drop-shadow-1);
+        stroke-width: 2px;
+      }
+
+      .cls-2, .cls-3 {
+        stroke: #1d1d1b;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-4 {
+        font-family: London-Tube, 'London Tube';
+        font-size: 12px;
+      }
+
+      .cls-3 {
+        fill: #93cebd;
+        stroke-width: .8px;
+      }
+    </style>
+    <radialGradient id="button-gradient" cx="39.12967" cy="50.55011" fx="20.23394" fy="50.55011" r="36.77587" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset=".5968" stop-color="#fbfbfb"/>
+      <stop offset="1" stop-color="#f4f4f4"/>
+    </radialGradient>
+    <filter id="drop-shadow-1" filterUnits="userSpaceOnUse">
+      <feOffset dx="2" dy="2"/>
+      <feGaussianBlur result="blur" stdDeviation="2"/>
+      <feFlood flood-color="#000" flood-opacity=".25"/>
+      <feComposite in2="blur" operator="in"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g class="cls-1">
+    <text class="cls-4" transform="translate(-17.08313 73.31897)"><tspan x="0" y="0">Open/close stations</tspan></text>
+  </g>
+  <circle class="cls-2" cx="40" cy="40" r="27.5"/>
+  <polygon class="cls-3" points="53.88743 23.88904 33.88738 43.88466 26.11292 36.11265 20 42.22545 33.88749 56.11096 60 30.00196 53.88743 23.88904"/>
+</svg>

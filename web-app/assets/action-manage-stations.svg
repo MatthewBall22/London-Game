@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="action-manage-stations" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 80 80">
+  <defs>
+    <style>
+      .cls-1 {
+        opacity: 0;
+      }
+
+      .cls-2 {
+        fill: url(#button-gradient);
+        filter: url(#drop-shadow-1);
+        stroke-width: 2px;
+      }
+
+      .cls-2, .cls-3 {
+        stroke: #1d1d1b;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-4 {
+        font-family: London-Tube, 'London Tube';
+        font-size: 12px;
+      }
+
+      .cls-3 {
+        fill: #93cebd;
+        stroke-width: .8px;
+      }
+    </style>
+    <radialGradient id="button-gradient" cx="39.12967" cy="50.55011" fx="20.23394" fy="50.55011" r="36.77587" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset=".5968" stop-color="#fbfbfb"/>
+      <stop offset="1" stop-color="#f4f4f4"/>
+    </radialGradient>
+    <filter id="drop-shadow-1" filterUnits="userSpaceOnUse">
+      <feOffset dx="2" dy="2"/>
+      <feGaussianBlur result="blur" stdDeviation="2"/>
+      <feFlood flood-color="#000" flood-opacity=".25"/>
+      <feComposite in2="blur" operator="in"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g class="cls-1">
+    <text class="cls-4" transform="translate(-17.08313 73.31897)"><tspan x="0" y="0">Open/close stations</tspan></text>
+  </g>
+  <circle class="cls-2" cx="40" cy="40" r="27.5"/>
+  <path class="cls-3" d="M58.88757,35.29602l-2.20578-5.32523-4.13543,.93901c-.96609-1.32619-2.12622-2.48872-3.45356-3.45105l.94025-4.13998-5.33203-2.2086-2.26255,3.59226c-1.62914-.25391-3.26562-.26658-4.88229-.00178l-2.26021-3.58817-5.32523,2.20578,.93901,4.13543c-1.3304,.95592-2.48872,2.12622-3.45105,3.45356l-4.13998-.94025-2.2086,5.33203,3.59226,2.26255c-.2581,1.61903-.26658,3.26562-.00178,4.88229l-3.58817,2.26021,2.20578,5.32523,4.13543-.93901c.95592,1.3304,2.12204,2.47861,3.45356,3.45105l-.94025,4.13998,5.33203,2.2086,2.25834-3.60244c1.62325,.26827,3.26562,.26658,4.88651,.01195l2.26021,3.58817,5.32523-2.20578-.93901-4.13543c1.32619-.96609,2.48872-2.12622,3.44683-3.46373l4.14419,.95042,2.2086-5.33203-3.59226-2.26255c.2581-1.61903,.2564-3.26141,.00178-4.88229l3.58817-2.26021Zm-9.89363,.97863c2.05846,4.96956-.29897,10.66089-5.26853,12.71935s-10.66089-.29897-12.71935-5.26853,.29897-10.66089,5.26853-12.71935,10.66089,.29897,12.71935,5.26853Z"/>
+</svg>

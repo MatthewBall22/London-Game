@@ -1,0 +1,135 @@
+<!-- In HTML Comments are written like this -->
+<!-- They can all be removed for your apps -->
+<!doctype html> <!-- This first line tells browsers to expect modern standard html 5 -->
+<html lang="en-gb"> <!-- This is indicates the page is written in British English, useful for accessibility -->
+
+<head>
+<meta charset="utf-8"> <!-- This indicates how the file is encoded. utf-8 is standard -->
+<meta name='viewport' content='width=device-width, initial-scale=1'> <!--Scale content to device-->
+<meta http-equiv='X-UA-Compatible' content='IE=edge'> 
+<title>The London Game</title> <!-- All pages need a title, this will be displayed in the browser's title bar -->
+<link rel="stylesheet" href="default.css"> <!-- Import style sheet – default.css -->
+<link rel="icon" href="./assets/london-game-icon.svg"> <!-- Import 'Favorites Icon' – favicon.png -->
+<script type="module" src="main.js" defer></script> <!-- Load the main script. Must be type="module". Have only one of these -->
+</head>
+
+<body>
+<!-- 
+<aside id="delay-detector"></aside>
+ -->
+
+<main id="main-content" class="absolute-center">
+    <article class="title" id="title-container">
+        <object type="image/svg+xml" data="./assets/title-screen-background.svg" alt="title background"
+        id="title-background-img" class="absolute-center" title="London Game background image">
+        </object>
+        <section id="title-button-container">
+            <button id="title-play-button" class="title-button clickable-button absolute-center">
+                PLAY
+            </button>
+<!--             <button id="title-instruction-button" class="title-button clickable-button absolute-center">
+                INSTRUCTIONS
+            </button> -->
+        </section>
+    </article>
+
+    <article id="configuration-container" class="absolute-center">
+        <h1 id="configuration-title">SELECT PLAYER OPTIONS</h1>
+        <section class="configuration-player" id="configuration-options">
+            <section id="num-players-container">
+                <label for="num-players-slider" id="num-players-label">
+                    Number of players
+                </label>
+                <div class="slide-containder">
+                    <input role="slider" type="range" min="2" max="4" value="2" 
+                    class="slider" id="num-players-slider" accesskey="s">
+                </div>
+                <ul class="range-labels">
+                    <li>2</li>
+                    <li>3</li>
+                    <li>4</li>
+                </ul>
+            </section>
+            <section id="player-configuration-nodes"></section>
+            <section id="configuration-action-container">
+                <button class="clickable-button" id="configuration-start-button">START GAME</button>
+            </section>
+        </section>
+    </article>
+
+    <article id="game-container">
+        <dialog id="game-dialog-container" class="game-dialog-container absolute-center animated-game-dialog" aria-label="game-dialogue">
+            <label id="game-dialog-text" for="game-dialog"></label>
+        </dialog>
+        <aside id="cards-panel"></aside>
+        <nav id="info-panel" class="info-panel">
+            <div id="top-border"></div>
+            <label for="current-player-name">Active Player</label>
+            <span id="current-player-name">Player 1</span>
+            <label for="current-tube-line" id="current-line">Current Line</label>
+            <span id="current-tube-line" class="line">None</span>
+        </nav>
+        <aside id="players-panel"></aside>
+        <aside id="actions-panel">
+            <input type="image" id="action-roll-dice" class="actions" src="./assets/action-roll-dice.svg"
+            aria-label="roll dice action button"></input>
+            <input type="image" id="action-change-stations" class="actions" src="./assets/action-change-stations.svg"
+            aria-label="change stations action button"></input>
+            <input type="image" id="action-manage-stations" class="actions" src="./assets/action-manage-stations.svg"
+            aria-label="manage stations action button"></input>
+        </aside>
+        <aside id="actions-panel-text">
+            <div class="action-text-container" id="action-roll-dice-text">
+                <label class="action-text" for="action-roll-dice">Roll Dice</label>
+            </div>
+            <div class="action-text-container" id="action-change-stations-text">
+                <label class="action-text" for="action-change-stations">Change Lines</label>
+            </div>
+            <div class="action-text-container" id="action-manage-stations-text">
+                <label class="action-text" for="action-manage-stations">Open / Close Stations</label>
+            </div>
+        </aside>
+        <aside id="dice-container" class="absolute-center">
+            <input type="image" id="dice" src="./assets/dice-1.svg"
+            aria-label="dice"></input>
+        </aside>
+        <section id="board-container">
+            <object type="image/svg+xml" data="./assets/tube-map.svg" alt="Game board"
+            id="board" class="absolute-center" title="London Game game board">
+        </section>
+    </article>
+
+</main>
+
+<div class="player-select">
+    <object type="image/svg+xml" alt="player image" class="player-glyph" 
+    data="" role="icon" aria-label="player image" tabindex="0"></object>
+    <div class="player-name-container">
+        <label class="player-name-label" for="player-name-input">Player Name</label>
+        <input type="text" placeholder="Player 1" alt="Player name input" 
+        autocomplete="off" class="player-name" maxlength="10" id="player-name-input">
+        <button class="set-name-button">OK</button>
+    </div>
+</div>
+
+<div class="destination-card-container card-container">
+    <object id="destination-card" type="image/svg+xml" alt="destination card" class="destination-card card animated-card" 
+    data="./assets/destination-card.svg" role="icon" tabindex="0" aria-label="destination card"></object>
+</div>
+
+<div class="close-station-card-container card-container">
+    <object id="player-1-close-station-card" type="image/svg+xml" alt="close station card" class="close-station-card card animated-card" 
+    data="./assets/close-station-card.svg" role="icon" tabindex="0" aria-label="close station card"></object>
+</div>
+
+<div class="open-station-card-container card-container">
+    <object id="player-1-open-station-card" type="image/svg+xml" alt="open station card" class="open-station-card card animated-card" 
+    data="./assets/open-station-card.svg" role="icon" tabindex="0" aria-label="open station card"></object>
+</div>
+
+<button id="tube-line-container" class="tube-line-container" tabindex="0">
+    <label for="tube-line-container" class="tube-line-text"></label>
+    <div class="tube-line-color"></div>
+</button>
+
+</body>
