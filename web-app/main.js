@@ -63,7 +63,7 @@ let GameState = {
     open_station_cards: {},
     destinations_per_player: 5,
     close_station_per_player: 3,
-    open_station_per_player: 0,
+    open_station_per_player: 1,
     closing_nodes: false,
     opening_nodes: false
 };
@@ -651,9 +651,16 @@ const addPointerArrows = function (platforms) {
 
 const selectPointerArrow = function (arrow) {
     //wait for user to click on one of the arrows
+    console.log(`pointer arrow selected. Arrow is`);
+    console.log(arrow);
     const pointerId = arrow.id;
     const platformName = pointerId.replace("-pointer", "");
-    console.log("arrows selected");
+    console.log(`pointer arrow selected. platform is ${platformName}`);
+    if (!arrow.classList.contains("arrow-selector")) {
+        console.log(`not an arrow. object clicked is:`);
+        removePointerArrows();
+        return;
+    }
     if (GameState.game_phase === "configuration") {
         //select a line from starting stations if in config phase
         delayThenDisplay(platformName);
@@ -776,6 +783,10 @@ const selectLineOption = function (lines, platforms) {
 const randomEvent = function (platform) {
     //events can trigger after changing lines
     const randNumber = Math.floor(Math.random() * 5);
+    let randomNode = null;
+    let randomPlatforms = null;
+    let selectedPlatform = null;
+    let stationName = null;
     switch (randNumber) {
     case 0:
         //gift the player an extra open station card
@@ -797,6 +808,31 @@ const randomEvent = function (platform) {
             prepareNextPlayer(platform);
         }, 4000);
         return true;
+    case 2:
+        //gift the player two close station cards
+        dealSpecialCard(GameState.player, 2, GameState.close_station_cards);
+        makeDialogSticky();
+        showDialog(`It's ${getPlayerName(GameState.player)}'s lucky day!
+        Collect 2 close station cards`);
+        setTimeout(function () {
+            prepareNextPlayer(platform);
+        }, 4000);
+        return true;
+    case 3:
+        //gift the player two close station cards
+        randomNode = LondonGame.randomItem(GameState.open_nodes);
+        randomPlatforms = platformsFromNode(randomNode);
+        console.clear();
+        selectedPlatform = LondonGame.randomItem(Array.from(randomPlatforms));
+        stationName = LondonGame.getStationName(selectedPlatform.classList[0]);
+        updatePlayerLocation(GameState.player, selectedPlatform.id);
+        makeDialogSticky();
+        showDialog(`${getPlayerName(GameState.player)} just had to visit
+        ${stationName}! Player has been moved to that location`);
+        setTimeout(function () {
+            prepareNextPlayer(selectedPlatform.id);
+        }, 4000);
+        return true;
 /*     case 2:
         LondonGame.addDestination(
             stationsCopy,
@@ -814,6 +850,10 @@ const randomEvent = function (platform) {
     } */
     //space to add extra "chance" functions for move station cards
     }
+};
+
+const platformsFromNode = function (node) {
+    return board.getElementsByClassName(node);
 };
 
 const prepareNextPlayer = function (platform) {
@@ -911,10 +951,19 @@ const handleWin = function (player) {
 };
 
 const handleEmptyPlayer = function (player) {
-    showDialog(`${getPlayerName(player)} has no more destination cards. Return
-    to ${GameState.starting_stations[player]} to win the game!`);
-    makeDialogSticky();
-    setTimeout(newPly(player), 3000);
+    const stationName = LondonGame.getStationName(
+        GameState.starting_stations[player]
+    );
+    console.log(stationName);
+    setTimeout(function () {
+        showDialog(`${getPlayerName(player)} has no more destination cards.
+        If they can return to ${stationName} they win the game!`);
+        makeDialogSticky();
+    }, 10);
+    setTimeout(function () {
+        newPly(player);
+        makeDialogAnimated();
+    }, 4000);
 };
 
 const checkAvailableActions = function (bool) {
@@ -966,10 +1015,20 @@ const rollDiceAction = function () {
     diceElement.className = "";
     diceElement.classList.add("dice-animation");
     diceElement.src = `./assets/dice-${diceRoll}.svg`;
+    if (diceRoll === 6) {
+        //gift the player an extra open station card
+        dealSpecialCard(GameState.player, 1, GameState.open_station_cards);
+        makeDialogSticky();
+        showDialog(`${getPlayerName(GameState.player)} rolled a 6!
+        Collect 1 open station card`);
+        setTimeout(function () {
+            hidePage(dialogContainer);
+        }, 3000);
+    }
     setTimeout(function () {
         diceElement.classList.remove("dice-animation");
         diceElement.classList.add("dice-reverse");
-    }, 1800);
+    }, 1500);
     const openPlatformsAtLine = findOpenPlatForms(
         GameState.open_nodes,
         GameState.player_lines[GameState.player]
@@ -984,6 +1043,11 @@ const rollDiceAction = function () {
     addPointerArrows(avaliablePlatforms);
 };
 
+const removeDice = function () {
+    diceElement.classList.remove("dice-animation");
+    diceElement.classList.add("dice-reverse");
+};
+
 const findOpenPlatForms = function (openNodes, line) {
     //find open platforms from open nodes on given line
     let openPlatformsAtLine = [];
@@ -993,7 +1057,7 @@ const findOpenPlatForms = function (openNodes, line) {
             function (platform) {
                 const lineName = platform.parentElement.id;
                 if (lineName === line) {
-                    openPlatformsAtLine.push(platform);
+                    openPlatformsAtLine.push(platform.id);
                 }
             }
         );
@@ -1019,12 +1083,12 @@ const manageStationsAction = function () {
     showDialog("Click your special cards to open or close any station!");
     if (closeCard) {
         setActionCardAnimation(closeCard);
+        closeCardSelected();
     }
     if (openCard) {
         setActionCardAnimation(openCard);
     }
     //ERROR: FIRING WHEN SHOULDN'T
-    manageElement.addEventListener("click", finishStationManage);
 };
 
 const setActionCardAnimation = function (actionCard) {
@@ -1044,6 +1108,7 @@ const addActionCardShadow = function (ev) {
     } else {
         openCardSelected();
     }
+    manageElement.addEventListener("click", finishStationManage);
 };
 
 const addActionCardAnimation = function (ev) {
@@ -1248,6 +1313,8 @@ const addPlayerLocator = function (player) {
 const movePlayerLocator = function (player, platform) {
     const playerLocator = board.getElementById(`player-${player}-locator`);
     const platformElement = board.getElementById(platform);
+    console.log(platform);
+    console.log(platformElement);
     moveSvgItem(platformElement, playerLocator, 960, 545);
 };
 
