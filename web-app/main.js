@@ -1,5 +1,295 @@
 //import R from "./ramda.js";
-import LondonGame from "./london-game.js";
+
+const LondonGame = Object.create(null);
+
+/**
+ * Returns a random item from an array. This is used to generate random
+ * destination stations for players and random dice rolls
+ * @memberof LondonGame
+ * @function
+ * @param {array} array The array from which a random item is chosen
+ * @returns {(string|number)} The returned item
+ */
+LondonGame.randomItem = function (array) {
+    const randomItemNumber = Math.floor(array.length * Math.random());
+    const randomItem = array[randomItemNumber];
+    return randomItem;
+};
+
+/**
+ * Creates an array filled with natural numbers. This is used to conveniently
+ * loop through natural numbers
+ * @memberof LondonGame
+ * @function
+ * @param {number} number The value up to which natural numbers will be
+ * generated
+ * @returns {number[]} The array filled with natural numbers
+ */
+LondonGame.integerArray = function (number) {
+    const array = new Array(number).fill(0);
+    let i = 0;
+    array.forEach(function () {
+        array[i] = i + 1;
+        i = i + 1;
+    });
+    return array;
+};
+
+/**
+ * Adds items to an array, provided that the item is not already included in
+ * the array. This is used to create arrays of unique stations and station nodes
+ * @memberof LondonGame
+ * @function
+ * @param {string[]} array The initial array
+ * @param {string} item The item to attempt to push into the array
+ * @returns {string[]} The updated array
+ */
+LondonGame.addToArray = function (array, item) {
+    if (!array.includes(item)) {
+        array.push(item);
+    }
+    return array;
+};
+
+/**
+ * Creates spaced and capitalised versions of station names or line names from
+ * the svg class names. This is used to display names for the game UI.
+ * @memberof LondonGame
+ * @function
+ * @param {string} station The class name of the station
+ * @returns {string} The updated version of the station name
+ */
+LondonGame.getStationName = function (station) {
+    const modifiedText = station.replace(
+        "-station",
+        ""
+    ).replace("-dialog", "").replace("-node", "");
+    const splicedText = modifiedText.split("-");
+    const textArray = [];
+    splicedText.forEach(function (element) {
+        element = element.charAt(0).toUpperCase() + element.slice(1);
+        textArray.push(element);
+    });
+    const finalText = textArray.join(" ");
+    return finalText;
+};
+
+
+/**
+ * Picks random stations from an array and adds them to an array of
+ * destinations. This is used at the beginning of the game to provide
+ * initial destinations, and later to give extra cards to players
+ * @memberof LondonGame
+ * @function
+ * @param {string[]} stations The array of stations to select from
+ * @param {number[]} array An array of natural numbers to loop though,
+ * equal to the total number of destinations
+ * @returns {string[]} An array of destination stations
+ */
+LondonGame.addDestinations = function (stations, array) {
+    const playerDestinations = [];
+    array.forEach(function () {
+        const randomStation = LondonGame.randomItem(stations);
+        playerDestinations.push(randomStation);
+        const randomStationIndex = stations.indexOf(randomStation);
+        stations.splice(randomStationIndex, 1);
+    });
+    return playerDestinations;
+};
+
+const updateAvailableRoutes = function (adjacencyList, platforms) {
+    adjacencyList.forEach(function (endingStops, startingStop) {
+        if (!platforms.includes(startingStop)) {
+            endingStops = [];
+        }
+        endingStops.forEach(function (platform) {
+            if (!platforms.includes(platform)) {
+                endingStops = LondonGame.closeNode(endingStops, platform);
+            }
+        });
+    });
+/*     platforms.push(location);
+    routes.forEach(function (route) {
+        let isRouteAvailable = true;
+        console.log(route);
+        route.forEach(function (platformOnRoute) {
+            if (!platforms.includes(platformOnRoute)) {
+                isRouteAvailable = false;
+            }
+        });
+        console.log(isRouteAvailable);
+        if (!isRouteAvailable) {
+            routes = LondonGame.closeNode(routes, route);
+        }
+    }); */
+    return adjacencyList;
+};
+
+
+/**
+ * This function performs a search algorithm to find the minimum number of steps
+ * it takes to get from one platform to another on the same line. This is used
+ * to set possible player locations when the dice action element is pressed.
+ * @memberof LondonGame
+ * @function
+ * @param {string} line The array of stations to select from
+ * @param {string[]} platforms An array of open platforms at a line
+ * @param {string} location The current location of the player, used as the
+ * start location for
+ * @param {number} dice The dice number rolled, equal to the maximum distance
+ * from the starting platform that the player can travel
+ * @returns {string[]} An array of distances to each station on the line
+ */
+LondonGame.breadthFirstSearch = function (line, platforms, location, dice) {
+    let adjacencyList = new Map();
+    const addEdge = function (origin, destination) {
+        if (!adjacencyList.has(origin)) {
+            adjacencyList.set(origin, []);
+        }
+        if (!adjacencyList.has(destination)) {
+            adjacencyList.set(destination, []);
+        }
+        adjacencyList.get(origin).push(destination);
+        adjacencyList.get(destination).push(origin);
+    };
+    const routes = [...LondonGame.AdjacentPlatforms[line]];
+    routes.forEach(function (route) {
+        addEdge(...route);
+    });
+    adjacencyList = updateAvailableRoutes(adjacencyList, platforms, location);
+    const visited = new Set(); //array with unique values
+    const queue = [location];
+    const stationDistance = new Map();
+    let i = 0; //represents depth of station
+    stationDistance.set(location, i);
+    visited.add(location);
+    //while queue has items in it or length is greater than zero
+    while (queue.length > 0) {
+        let station = queue.shift(); //mutates the queue
+        let destinations = adjacencyList.get(station);
+        if (!destinations) {
+            return;
+        }
+        i = stationDistance.get(station) + 1; //depth for preceding stations
+        let j = 0;
+        while (j < destinations.length) {
+            let thisDestination = destinations[j];
+            if (!visited.has(thisDestination)) {
+                visited.add(thisDestination);
+                //add any new destinations to visited
+                queue.push(thisDestination);
+                if (!stationDistance.has(thisDestination)) {
+                    //only calculate if destination is new
+                    stationDistance.set(thisDestination, i);
+                }
+            }
+            j = j + 1;
+        }
+    }
+    let inRangePlatforms = [];
+    stationDistance.forEach(function (value, key) {
+        if (value <= dice) {
+            if (key !== location) {
+                inRangePlatforms.push(key);
+            }
+        }
+    });
+    return inRangePlatforms;
+    //return stationDistance.keys(); //returns map of station distances */
+};
+
+
+/**
+ * This function checks to see if a node is within a list of open nodes. If
+ * it is, it removes the selected node from the array
+ * @memberof LondonGame
+ * @function
+ * @param {string[]} openNodes An array of open nodes
+ * @param {string} node Selected node to attempt removing from the array
+ * @returns {string[]} Updated open nodes
+ */
+LondonGame.closeNode = function (openNodes, node) {
+    const index = openNodes.indexOf(node);
+    if (index > -1) {
+        openNodes.splice(index, 1);
+    }
+    return openNodes;
+};
+
+/**
+ * This function checks the object containing destinations for each player to
+ * see if the player has reached any of their destinations.
+ * @memberof LondonGame
+ * @function
+ * @param {number} player Active player index
+ * @param {string} station Active player station
+ * @param {string[]} destinations An object containing destinations for each
+ * player
+ * @returns {string[]} Updated destinations list, with destinations only updated
+ * for active player
+ */
+LondonGame.checkDestinationCards = function (player, station, destinations) {
+    //checks if player's current station matches a destination card
+    const activePlayerCards = destinations[player];
+    if (activePlayerCards.includes(station)) {
+        const index = activePlayerCards.indexOf(station);
+        activePlayerCards.splice(index, 1);
+        destinations[player] = activePlayerCards;
+    }
+    return destinations;
+};
+
+/**
+ * This function checks whether the active player has won the game. This
+ * function is passed before initialising a new turn
+ * @memberof LondonGame
+ * @function
+ * @param {number} player Active player index
+ * @param {string[]} destinations An object containing the destination card
+ * stations for each player
+ * player
+ * @param {string} station Active player station
+ * @param {string[]} startingStations An object containing the starting station
+ * for each player
+ * @returns {number | null} If a player has no destination cards, and they have
+ * got back to their starting station, they have won the game. Returns the index
+ * of the winning player if one exists, otherwise returns empty
+ */
+LondonGame.checkForWin = function (
+    player,
+    destinations,
+    station,
+    startingStations
+) {
+    const startingStation = startingStations[player];
+    if (station === startingStation) {
+        if (LondonGame.checkHasDestinations(player, destinations)) {
+            return player;
+        }
+    } else {
+        return null;
+    }
+};
+
+/**
+ * This function checks whether a player has reached all their destinations.
+ * This is used to toggle a dialog to remind them to return to their original
+ * station.
+ * @memberof LondonGame
+ * @function
+ * @param {number} player Active player index
+ * @param {string[]} destinations An object containing destination card stations
+ * for each player
+ * @returns {number | null} Returns the index of the player who has reached all
+ * their destinations if one exists, otherwise returns empty
+ */
+LondonGame.checkHasDestinations = function (player, destinations) {
+    const playerDestinations = destinations[player];
+    if (playerDestinations.length === 0) {
+        return player;
+    }
+};
+
 
 const titlePage = document.getElementById("title-container");
 const configurationPage = document.getElementById("configuration-container");
