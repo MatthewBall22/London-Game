@@ -268,9 +268,8 @@ const updatePlayerNamesList = function (element, input) {
 
 const movePlayerImages = function () {
     //select all the configured children and move to the gameplay screen
-    let i = 1;
     Array.from(playerContainer.querySelectorAll(".player-glyph")).forEach(
-        function (playerImage) {
+        function (playerImage, index) {
             //loop through all existing player images
             const inGamePlayer = playerImage.cloneNode(true);
             inGamePlayer.classList.add("greyscale");
@@ -283,9 +282,8 @@ const movePlayerImages = function () {
                     inGamePlayer,
                     "inner-text"
                 );
-                attachText(innerTextElement, InputPlayerNames, i);
+                attachText(innerTextElement, InputPlayerNames, index + 1);
                 //attach names set in the configuration page
-                i = i + 1;
                 //increase counter for each player image
             });
         }
