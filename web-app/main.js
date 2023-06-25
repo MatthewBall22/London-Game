@@ -442,6 +442,7 @@ const dealSpecialCard = function (player, count, type) {
             ? document.querySelector(`#player-${player}-close-station-card`)
             : document.querySelector(`#player-${player}-open-station-card`)
         );
+        displayPage(specialCard);
         updateSpecialCard(specialCard, count + cardCount, player);
     }
     type[player] = count + cardCount;
