@@ -61,7 +61,7 @@ let GameState = {
     starting_stations: {},
     close_station_cards: {},
     open_station_cards: {},
-    destinations_per_player: 1,
+    destinations_per_player: 5,
     close_station_per_player: 3,
     open_station_per_player: 1,
     closing_nodes: false,
