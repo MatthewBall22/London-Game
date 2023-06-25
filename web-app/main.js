@@ -780,7 +780,7 @@ const selectLineOption = function (lines, platforms) {
 
 const randomEvent = function (platform) {
     //events can trigger after changing lines
-    const randNumber = Math.floor(Math.random() * 5);
+    const randNumber = Math.floor(Math.random() * 6);
     let randomNode = null;
     let randomPlatforms = null;
     let selectedPlatform = null;
@@ -817,6 +817,7 @@ const randomEvent = function (platform) {
         }, 4000);
         return true;
     case 3:
+    case 4:
         //gift the player two close station cards
         randomNode = LondonGame.randomItem(GameState.open_nodes);
         randomPlatforms = platformsFromNode(randomNode);
