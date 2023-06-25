@@ -63,7 +63,7 @@ let GameState = {
     open_station_cards: {},
     destinations_per_player: 5,
     close_station_per_player: 3,
-    open_station_per_player: 1,
+    open_station_per_player: 0,
     closing_nodes: false,
     opening_nodes: false
 };
@@ -300,7 +300,6 @@ startGameButton.onclick = function () {
     displayPage(gamePage);
     GameState.player = 1;
     board = document.getElementById("board").contentDocument;
-    board.addEventListener("load", console.log(document.getElementById("board")));
     initialiseStations();
     animateActionText();
     setButtonActions([false, false, false]);
@@ -415,7 +414,8 @@ const dealSpecialCard = function (player, count, type) {
     //deal close station cards to a given player
     let cardCount = type[player];
     let specialCard = null;
-    if (!cardCount) {
+    console.log(cardCount === undefined);
+    if (cardCount === undefined) {
         //add the card to the document if none exists
         let newCard = (
             type === GameState.close_station_cards
@@ -443,6 +443,7 @@ const dealSpecialCard = function (player, count, type) {
             ? document.querySelector(`#player-${player}-close-station-card`)
             : document.querySelector(`#player-${player}-open-station-card`)
         );
+        displayPage(specialCard);
         updateSpecialCard(specialCard, count + cardCount, player);
     }
     type[player] = count + cardCount;
@@ -459,7 +460,7 @@ const dealSpecialCard = function (player, count, type) {
             ? document.querySelector(`#player-${player}-close-station-card`)
             : document.querySelector(`#player-${player}-open-station-card`)
         );
-        specialCard.remove();
+        hidePage(specialCard);
         return false;
     }
     return true;
@@ -549,7 +550,6 @@ const initialiseStations = function () {
                 trainStations,
                 platformElement.classList[0]
             );
-            console.log(trainStations); //HEREE
         }
     });
     Array.from(trainStations).forEach(function (station) {
@@ -652,13 +652,9 @@ const addPointerArrows = function (platforms) {
 
 const selectPointerArrow = function (arrow) {
     //wait for user to click on one of the arrows
-    console.log(`pointer arrow selected. Arrow is`);
-    console.log(arrow);
     const pointerId = arrow.id;
     const platformName = pointerId.replace("-pointer", "");
-    console.log(`pointer arrow selected. platform is ${platformName}`);
     if (!arrow.classList.contains("arrow-selector")) {
-        console.log(`not an arrow. object clicked is:`);
         removePointerArrows();
         return;
     }
@@ -955,7 +951,6 @@ const handleEmptyPlayer = function (player) {
     const stationName = LondonGame.getStationName(
         GameState.starting_stations[player]
     );
-    console.log(stationName);
     setTimeout(function () {
         showDialog(`${getPlayerName(player)} has no more destination cards.
         If they can return to ${stationName} they win the game!`);
@@ -1314,8 +1309,6 @@ const addPlayerLocator = function (player) {
 const movePlayerLocator = function (player, platform) {
     const playerLocator = board.getElementById(`player-${player}-locator`);
     const platformElement = board.getElementById(platform);
-    console.log(platform);
-    console.log(platformElement);
     moveSvgItem(platformElement, playerLocator, 960, 545);
 };
 

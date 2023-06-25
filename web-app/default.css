@@ -770,6 +770,7 @@
 {
     position: absolute;
     width: 100vw;
+    border: none;
     height: var(--info-panel-height);
     background-color: var(--london-blue-color);
     padding: 0;
@@ -909,7 +910,6 @@
 {
     display: block;
     pointer-events: none;
-    background-color: red;
     width: 20px;
     margin-right: auto;
     height: 100%;
