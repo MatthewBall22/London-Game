@@ -1036,7 +1036,11 @@ const rollDiceAction = function () {
         GameState.player_locations[GameState.player],
         diceRoll
     );
-    addPointerArrows(avaliablePlatforms);
+    if (avaliablePlatforms.length === 0) {
+        alert ("this action has caused an error, will fix later :(");
+    } else {
+        addPointerArrows(avaliablePlatforms);
+    }
 };
 
 const removeDice = function () {
