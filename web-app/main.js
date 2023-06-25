@@ -61,7 +61,7 @@ let GameState = {
     starting_stations: {},
     close_station_cards: {},
     open_station_cards: {},
-    destinations_per_player: 5,
+    destinations_per_player: 1,
     close_station_per_player: 3,
     open_station_per_player: 1,
     closing_nodes: false,
@@ -927,7 +927,22 @@ const newPly = function (player) {
     GameState.player = (player) % GameState.number_of_players + 1;
     if (GameState.game_phase === "configuration") {
         checkIfConfigComplete(); //BE CAREFUL WITH TRIGGERING THIS
+    } else if (GameState.destinations[GameState.player].length === 0) {
+        const station = GameState.starting_stations[GameState.player];
+        const stationName = LondonGame.getStationName(station);
+        updateInfoPanel(
+            GameState.player,
+            GameState.player_lines[GameState.player]
+        );
+        //update the info panel based on the active player and the active line
+        showDialog(`No more destination cards.
+        Return to ${stationName} to win the game!`);
     } else {
+        updateInfoPanel(
+            GameState.player,
+            GameState.player_lines[GameState.player]
+        );
+        //update the info panel based on the active player and the active line
         waitForPlay();
     }
     hidePage(diceElement);
@@ -1285,8 +1300,6 @@ const checkManageStations = function () {
 };
 
 const waitForPlay = function () {
-    updateInfoPanel(GameState.player, GameState.player_lines[GameState.player]);
-    //update the info panel based on the active player and the active line
     showDialog(
         "Select a move option: roll dice, " +
         "change lines, or open / close stations"
