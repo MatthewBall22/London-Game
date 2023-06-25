@@ -414,7 +414,6 @@ const dealSpecialCard = function (player, count, type) {
     //deal close station cards to a given player
     let cardCount = type[player];
     let specialCard = null;
-    console.log(cardCount === undefined);
     if (cardCount === undefined) {
         //add the card to the document if none exists
         let newCard = (
@@ -443,7 +442,6 @@ const dealSpecialCard = function (player, count, type) {
             ? document.querySelector(`#player-${player}-close-station-card`)
             : document.querySelector(`#player-${player}-open-station-card`)
         );
-        displayPage(specialCard);
         updateSpecialCard(specialCard, count + cardCount, player);
     }
     type[player] = count + cardCount;
@@ -467,7 +465,6 @@ const dealSpecialCard = function (player, count, type) {
 };
 
 const updateSpecialCard = function (card, count) {
-
     //card.id = `player-${player}-${type}-station-card`;
     //change the text on the special cards to indicate the number of cards
     const closeCardDoc = card.contentDocument;
