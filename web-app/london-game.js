@@ -371,12 +371,14 @@ const updateAvailableRoutes = function (adjacencyList, platforms) {
     adjacencyList.forEach(function (endingStops, startingStop) {
         if (!platforms.includes(startingStop)) {
             endingStops = [];
+        } else {
+            endingStops.forEach(function (platform) {
+                if (!platforms.includes(platform)) {
+                    endingStops = LondonGame.closeNode(endingStops, platform);
+                }
+            });
         }
-        endingStops.forEach(function (platform) {
-            if (!platforms.includes(platform)) {
-                endingStops = LondonGame.closeNode(endingStops, platform);
-            }
-        });
+
     });
 /*     platforms.push(location);
     routes.forEach(function (route) {

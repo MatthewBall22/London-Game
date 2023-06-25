@@ -952,8 +952,8 @@ const handleEmptyPlayer = function (player) {
         GameState.starting_stations[player]
     );
     setTimeout(function () {
-        showDialog(`${getPlayerName(player)} has no more destination cards.
-        If they can return to ${stationName} they win the game!`);
+        showDialog(`No more destination cards.
+        Return to ${stationName} to win the game!`);
         makeDialogSticky();
     }, 10);
     setTimeout(function () {
@@ -1037,7 +1037,10 @@ const rollDiceAction = function () {
         diceRoll
     );
     if (avaliablePlatforms.length === 0) {
-        alert ("this action has caused an error, will fix later :(");
+        showDialog("No possible moves");
+        setTimeout(function () {
+            newPly(GameState.player);
+        }, 3000);
     } else {
         addPointerArrows(avaliablePlatforms);
     }
