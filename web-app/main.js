@@ -300,14 +300,14 @@ startGameButton.onclick = function () {
     displayPage(gamePage);
     GameState.player = 1;
     board = document.getElementById("board").contentDocument;
+    board.addEventListener("load", console.log(document.getElementById("board")));
     initialiseStations();
     animateActionText();
     setButtonActions([false, false, false]);
     addActionEventListeners([false, false, false]);
     //add all the stations to an array
-    let stationsCopy = [...stations];
+    let stationsCopy = [...stations]; //RETURNS NULL
     InputPlayerNames.forEach(function (value, name) {
-        value = value;
         //create destinations list for all players
         const stationsList = LondonGame.addDestinations(
             stationsCopy,
@@ -549,6 +549,7 @@ const initialiseStations = function () {
                 trainStations,
                 platformElement.classList[0]
             );
+            console.log(trainStations); //HEREE
         }
     });
     Array.from(trainStations).forEach(function (station) {

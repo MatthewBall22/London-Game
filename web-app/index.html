@@ -2,8 +2,8 @@
 <!-- They can all be removed for your apps -->
 <!doctype html> <!-- This first line tells browsers to expect modern standard html 5 -->
 <html lang="en-gb"> <!-- This is indicates the page is written in British English, useful for accessibility -->
-
 <head>
+<meta http-equiv="Permissions-Policy" content="interest-cohort=()">
 <meta charset="utf-8"> <!-- This indicates how the file is encoded. utf-8 is standard -->
 <meta name='viewport' content='width=device-width, initial-scale=1'> <!--Scale content to device-->
 <meta http-equiv='X-UA-Compatible' content='IE=edge'> 
@@ -94,8 +94,7 @@
             aria-label="dice"></input>
         </aside>
         <section id="board-container">
-            <object type="image/svg+xml" data="./assets/tube-map.svg" alt="Game board"
-            id="board" class="absolute-center" title="London Game game board">
+            <iframe src="./assets/tube-map.svg" title="Game board" id="board" class="absolute-center"></iframe>
         </section>
     </article>
 

@@ -862,6 +862,7 @@
     min-width: 80vw;
     top: 48vh;
     max-width: 180vh;
+    height: 100vh;
 }
 
 #player-locators
