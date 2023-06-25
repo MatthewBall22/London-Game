@@ -442,23 +442,26 @@ const dealSpecialCard = function (player, count, type) {
             ? document.querySelector(`#player-${player}-close-station-card`)
             : document.querySelector(`#player-${player}-open-station-card`)
         );
+        displayPage(specialCard.parentElement);
         displayPage(specialCard);
         updateSpecialCard(specialCard, count + cardCount, player);
     }
     type[player] = count + cardCount;
     Array.from(cardsPanel.querySelectorAll(`.player-${player}-card`)).forEach(
         function (cardDiv) {
-            cardDiv.setAttribute("style", "display:block");
+            displayPage(cardDiv);
         }
     );
     //update game state to reflect number of cards per player
     if (count + cardCount === 0) {
+        console.log("trying to hide");
         //remove card if total number of cards is zero
         specialCard = (
             type === GameState.close_station_cards
             ? document.querySelector(`#player-${player}-close-station-card`)
             : document.querySelector(`#player-${player}-open-station-card`)
         );
+        hidePage(specialCard.parentElement);
         hidePage(specialCard);
         return false;
     }
@@ -817,7 +820,6 @@ const randomEvent = function (platform) {
         //gift the player two close station cards
         randomNode = LondonGame.randomItem(GameState.open_nodes);
         randomPlatforms = platformsFromNode(randomNode);
-        console.clear();
         selectedPlatform = LondonGame.randomItem(Array.from(randomPlatforms));
         stationName = LondonGame.getStationName(selectedPlatform.classList[0]);
         updatePlayerLocation(GameState.player, selectedPlatform.id);
